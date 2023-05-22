@@ -1,0 +1,67 @@
+﻿@page "/clientes"
+@using Paca.Shared.Modelos
+@inject HttpClient http
+@inject NavigationManager navegar
+<h3>Lista de clientes</h3>
+<button class="btn btn-primary" @onclick="Agregar"><span class="oi oi-plus"></span> Nuevo cliente</button>
+
+@if (losClientes == null)
+{
+    <h1>Cargando datos...</h1>
+}
+else if (losClientes.Count == 0)
+{
+    <h1>No existen clientes registrados</h1>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Direccion</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var elcliente in losClientes)
+            {
+                <tr>
+                    <td>@elcliente.Id</td>
+                    <td>@elcliente.Nombre</td>
+                    <td>@elcliente.Correo</td>
+                    <td>@elcliente.Direccion</td>
+                    <td>
+                        <button class="btn-sm" @onclick="(()=>Modificar(elcliente.Id))"><span class="oi oi-pencil"></span></button>
+                        <button class="btn-sm" @onclick="(()=>Eliminar(elcliente))"><span class="oi oi-trash"></span></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Cliente> losClientes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        losClientes = await http.GetFromJsonAsync<List<Cliente>>("api/clientes");
+    }
+    private void Agregar()
+    {
+        navegar.NavigateTo("/clientes/nuevo");
+    }
+    private void Modificar(int id)
+    {
+        navegar.NavigateTo($"/clientes/editar/{id}");
+    }
+
+    private async Task Eliminar(Cliente unCliente)
+    {
+        await http.DeleteAsync($"api/clientes/{unCliente.Id}");
+        losClientes.Remove(unCliente);
+    }
+}
