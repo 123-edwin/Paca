@@ -10,17 +10,12 @@ namespace Paca.Shared.Modelos
     public class Cliente
     {
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "El nombre es obligatorio")]
+        [Required(ErrorMessage ="Ingresa un nombre")]
         public string? Nombre { get; set; }
-
-        [Required(ErrorMessage = "El correo es obligatorio")]
-        [EmailAddress(ErrorMessage = "Debe ser un correo valido")]
+        [Required(ErrorMessage ="Ingresa un numero de telefono")]
+        public string? Telefono { get; set; }
+        [EmailAddress(ErrorMessage ="Ingresa un correo")]
         public string? Correo { get; set; }
-
-        [Required(ErrorMessage = "La direccion es obligatoria")]
-        public string? Direccion { get; set; }
-        public ICollection<Pedido>? Pedidos { get; set; }
-        
+        public virtual ICollection<Pedido>? Pedidos { get; set; }
     }
 }

@@ -11,20 +11,12 @@ namespace Paca.Shared.Modelos
     public class Producto
     {
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "El nombre del producto es obligatorio")]
-        public string Nombre { get; set; }
-
-        [Required(ErrorMessage = "El costo del producto es obligatorio")]
-        [Range(0, double.MaxValue, ErrorMessage = "El costo debe ser mayor o igual a cero")]
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal Costo { get; set; }
-
-        [Required(ErrorMessage = "La cantidad de existencias es obligatoria")]
-        [Range(0, int.MaxValue, ErrorMessage = "La cantidad de existencias debe ser mayor o igual a cero")]
-        public int CantidadExistencias { get; set; }
-
-        // Relación con la clase Pedido
+        [Required(ErrorMessage = "Ingresa un nombre")]
+        public string? Nombre { get; set; }
+        [Required(ErrorMessage ="Es necesario ingresar el precio")]
+        public float Precio { get; set; }
+        [Range(1, 5, ErrorMessage = "Debes seleccionar una talla")]
+        public int Talla { get; set; }
         public ICollection<Pedido>? Pedidos { get; set; }
     }
 }
