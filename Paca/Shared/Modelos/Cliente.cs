@@ -16,6 +16,7 @@ namespace Paca.Shared.Modelos
         public string? Telefono { get; set; }
         [EmailAddress(ErrorMessage ="Ingresa un correo")]
         public string? Correo { get; set; }
+        public string? Direccion { get; set; }
         public virtual ICollection<Pedido>? Pedidos { get; set; }
     }
 }

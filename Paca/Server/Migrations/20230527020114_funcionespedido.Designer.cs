@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Paca.Server.Data;
 
@@ -11,9 +12,11 @@ using Paca.Server.Data;
 namespace Paca.Server.Migrations
 {
     [DbContext(typeof(ClienteContexto))]
-    partial class ClienteContextoModelSnapshot : ModelSnapshot
+    [Migration("20230527020114_funcionespedido")]
+    partial class funcionespedido
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

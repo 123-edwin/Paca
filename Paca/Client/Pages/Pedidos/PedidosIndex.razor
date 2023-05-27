@@ -1,0 +1,70 @@
+﻿@page "/pedidos"
+@using Paca.Shared.Modelos
+@inject HttpClient http
+@inject NavigationManager navegar
+<h3>Lista de Pedidos</h3>
+<button class="btn btn-primary" @onclick="Agregar"><span class="oi oi-plus"></span> Nuevo cliente</button>
+@if (losPedidos == null)
+{
+    <h1>Cargando datos...</h1>
+}
+else if (losPedidos.Count == 0)
+{
+    <h1>No existen clientes registrados</h1>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>ClienteId</th>
+                <th>ProductoId</th>
+                <th>Cantidad</th>
+                <th>Nota</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var elpedido in losPedidos)
+            {
+                <tr>
+                    <td>@elpedido.Fecha</td>
+                    <td>@elpedido.ClienteId</td>
+                    <td>@elpedido.ProductoId</td>
+                    <td>@elpedido.Cantidad</td>
+                    <td>@elpedido.Nota</td>
+                    <td>           
+                        <button class="btn-sm btn-primary" @onclick="(()=>Modificar(elpedido.Id))"><span class="oi oi-pencil"></span></button>
+                        <button class="btn-sm btn-danger" @onclick="(()=>Eliminar(elpedido))"><span class="oi oi-trash"></span></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Pedido> losPedidos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        losPedidos = await http.GetFromJsonAsync<List<Pedido>>("api/pedidos");
+    }
+
+    private void Agregar()
+    {
+        navegar.NavigateTo("/pedidos/nuevo");
+    }
+
+    private void Modificar(int id)
+    {
+        navegar.NavigateTo($"/pedidos/editar/{id}");
+    }
+
+    private async Task Eliminar(Pedido unPedido)
+    {
+        await http.DeleteAsync($"api/pedidos/{unPedido.Id}");
+        losPedidos.Remove(unPedido);
+    }
+}

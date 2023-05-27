@@ -1,0 +1,78 @@
+﻿@page "/productos"
+@using Paca.Shared.Modelos
+@inject HttpClient http
+@inject NavigationManager navegar
+<h3>Lista de Productos</h3>
+<button class="btn btn-primary" @onclick="Agregar"><span class="oi oi-plus"></span> Nuevo cliente</button>
+@if (losProductos == null)
+{
+    <h1>Cargando datos...</h1>
+}
+else if (losProductos.Count == 0)
+{
+    <h1>No existen productos registrados</h1>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Talla</th>
+                <th>Existencias</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var elproducto in losProductos)
+            {
+                <tr>
+                    <td>@elproducto.Id</td>
+                    <td>@elproducto.Nombre</td>
+                    <td>@elproducto.Precio</td>
+                    <td>
+                            @(elproducto.Talla == 1 ? "S" :
+                                elproducto.Talla == 2 ? "M" :
+                                elproducto.Talla == 3 ? "L" :
+                                elproducto.Talla == 4 ? "XL" : "")
+                    </td>
+                    <td>@elproducto.Existencias</td>
+                    <td>
+                        <button class="btn-sm btn-primary" @onclick="(()=>Modificar(elproducto.Id))"><span class="oi oi-pencil"></span></button>
+                        <button class="btn-sm btn-danger" @onclick="(()=>Eliminar(elproducto))"><span class="oi oi-trash"></span></button>
+                    </td>
+                    
+                   
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Producto> losProductos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        losProductos = await http.GetFromJsonAsync<List<Producto>>("api/productos");
+    }
+
+    private void Agregar()
+    {
+        navegar.NavigateTo("/productos/nuevo");
+    }
+
+    private void Modificar(int id)
+    {
+        navegar.NavigateTo($"/productos/editar/{id}");
+    }
+
+    private async Task Eliminar(Producto unProducto)
+    {
+        await http.DeleteAsync($"api/productos/{unProducto.Id}");
+        losProductos.Remove(unProducto);
+    }
+}

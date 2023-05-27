@@ -15,8 +15,10 @@ namespace Paca.Shared.Modelos
         public string? Nombre { get; set; }
         [Required(ErrorMessage ="Es necesario ingresar el precio")]
         public float Precio { get; set; }
-        [Range(1, 5, ErrorMessage = "Debes seleccionar una talla")]
+        [Range(1, 4, ErrorMessage = "Debes seleccionar una talla")]
         public int Talla { get; set; }
+        [Required(ErrorMessage ="Debes ingresar las existencias")]
+        public int Existencias { get; set; }
         public ICollection<Pedido>? Pedidos { get; set; }
     }
 }

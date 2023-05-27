@@ -1,0 +1,77 @@
+﻿@page "/pedidos/editar/{Id:int}"
+@using Paca.Shared.Modelos;
+@inject HttpClient http
+@inject NavigationManager navegar
+<h3>PedidosModificar</h3>
+
+<EditForm Model="elPedido" OnValidSubmit="Guardar">
+
+    <DataAnnotationsValidator />
+
+    <div class="mb-3"
+    <label for="txtFecha" class="form-label">Fecha</label>
+    <InputDate id="txtFecha" class="form-control" @bind-Value="elPedido.Fecha"/>
+    <ValidationMessage For="(()=>elPedido.Fecha)"/>
+</div>
+
+    <div class="mb-3">
+        <label for="txtClienteId" class="form-label">ClienteId</label>
+        <InputSelect id="txtClienteId" class="form-control" @bind-Value="elPedido.ClienteId">
+            <option value="">Seleccione un cliente</option>
+            @foreach (var cliente in listaClientes)
+            {
+                <option value="@cliente.Id">@cliente.Nombre</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="(()=>elPedido.ClienteId)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="txtProductoId" class="form-label">ProductoId</label>
+        <InputSelect id="txtProductoId" class="form-control" @bind-Value="elPedido.ProductoId">
+            <option value="">Seleccione un producto</option>
+            @foreach (var producto in listaProductos)
+            {
+                <option value="@producto.Id">@producto.Nombre</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="(()=>elPedido.ProductoId)" />
+    </div>
+
+    <div class="mb-3"
+    <label for="txtCantidad" class="form-label">Cantidad</label>
+    <InputNumber id="txtCantidad" class="form-control" @bind-Value="elPedido.Cantidad"/>
+    <ValidationMessage For="(()=>elPedido.Cantidad)"/>
+</div>
+
+    <div class="mb-3"
+    <label for="txtNota" class="form-label">Nota</label>
+    <InputText id="txtNota" class="form-control" @bind-Value="elPedido.Nota"/>
+    <ValidationMessage For="(()=>elPedido.Nota)"/>
+</div>
+
+
+
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Pedido elPedido = new Pedido();
+    private List<Cliente> listaClientes = new List<Cliente>();
+    private List<Producto> listaProductos = new List<Producto>();
+    protected override async Task OnInitializedAsync()
+    {
+        elPedido = await http.GetFromJsonAsync<Pedido>($"api/pedidos/{Id}");
+        listaProductos = await http.GetFromJsonAsync<List<Producto>>("api/productos");
+        listaClientes = await http.GetFromJsonAsync<List<Cliente>>("api/clientes");
+    }
+    private async void Guardar()
+    {
+        await http.PutAsJsonAsync($"api/pedidos/{Id}", elPedido);
+        navegar.NavigateTo("/pedidos");
+    }
+}

@@ -21,7 +21,8 @@ namespace Paca.Shared.Modelos
         public int Cantidad { get; set; }
         [Required(ErrorMessage = "Escribe a donde va el pedido")]
         public string? Nota { get; set; }
-      
+        public virtual int CantidadAnterior { get; set; }
+
 
     }
 }

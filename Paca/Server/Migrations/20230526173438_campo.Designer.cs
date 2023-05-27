@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Paca.Server.Data;
 
@@ -11,9 +12,11 @@ using Paca.Server.Data;
 namespace Paca.Server.Migrations
 {
     [DbContext(typeof(ClienteContexto))]
-    partial class ClienteContextoModelSnapshot : ModelSnapshot
+    [Migration("20230526173438_campo")]
+    partial class campo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,9 +63,6 @@ namespace Paca.Server.Migrations
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
-                    b.Property<int>("CantidadAnterior")
-                        .HasColumnType("int");
-
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
@@ -92,9 +92,6 @@ namespace Paca.Server.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Existencias")
-                        .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()

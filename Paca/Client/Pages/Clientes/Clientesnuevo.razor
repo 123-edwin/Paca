@@ -1,0 +1,44 @@
+﻿@page "/clientes/nuevo"
+@using Paca.Shared.Modelos;
+@inject HttpClient http
+@inject NavigationManager navegar
+<h3>Ingrese el Cliente</h3>
+
+<EditForm Model="elCliente" OnValidSubmit="Guardar">
+    
+    <DataAnnotationsValidator />
+    <div class="mb-3"
+    <label for="txtNombre" class="form-label">Nombre</label>
+    <InputText id="txtNombre" class="form-control" @bind-Value="elCliente.Nombre"/>
+    <ValidationMessage For="(()=>elCliente.Nombre)"/>
+</div>
+
+    <div class="mb-3"
+    <label for="txtTelefono" class="form-label">Telefono</label>
+    <InputText id="txtTelefono" class="form-control" @bind-Value="elCliente.Telefono"/>
+    <ValidationMessage For="(()=>elCliente.Telefono)"/>
+</div>
+
+    <div class="mb-3"
+    <label for="txtCorreo" class="form-label">Correo</label>
+    <InputText id="txtCorreo" class="form-control" @bind-Value="elCliente.Correo"/>
+    <ValidationMessage For="(()=>elCliente.Correo)"/>
+</div>
+
+    <div class="mb-3"
+    <label for="txtDireccion" class="form-label">Direccion</label>
+    <InputText id="txtDireccion" class="form-control" @bind-Value="elCliente.Direccion"/>
+    <ValidationMessage For="(()=>elCliente.Direccion)"/>
+</div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+
+</EditForm>
+
+@code {
+    private Cliente elCliente = new Cliente();
+    private async void Guardar()
+    {
+        await http.PostAsJsonAsync("api/clientes", elCliente);
+        navegar.NavigateTo("/clientes");
+    }
+}

@@ -1,0 +1,59 @@
+﻿@page "/productos/editar/{Id:int}"
+@using Paca.Shared.Modelos;
+@inject HttpClient http
+@inject NavigationManager navegar
+<h3>Editar Producto</h3>
+
+<EditForm Model="elProducto" OnValidSubmit="Guardar">
+
+    <DataAnnotationsValidator />
+
+    <div class="mb-3"
+    <label for="txtNombre" class="form-label">Nombre</label>
+    <InputText id="txtNombre" class="form-control" @bind-Value="elProducto.Nombre"/>
+    <ValidationMessage For="(()=>elProducto.Nombre)"/>
+</div>
+
+    <div class="mb-3"
+    <label for="txtPrecio" class="form-label">Precio</label>
+    <InputNumber id="txtPrecio" class="form-control" @bind-Value="elProducto.Precio"/>
+    <ValidationMessage For="(()=>elProducto.Precio)"/>
+</div>
+
+ <div class="mb-3"
+    <label for="txtExistencias" class="form-label">Existencias</label>
+    <InputNumber id="txtExistencias" class="form-control" @bind-Value="elProducto.Existencias"/>
+    <ValidationMessage For="(()=>elProducto.Existencias)"/>
+</div>
+
+    <div class=" mb-3 row"></div>
+    <label for="txtGenero" class="col-sm-2 col-form-label">Talla</label>
+    <div class="col-sm-10">
+        <InputRadioGroup @bind-Value="elProducto.Talla">
+            <label><InputRadio Value="4" />XL</label>
+            <label><InputRadio Value="3" />L</label>
+            <label><InputRadio Value="2" />M</label>
+            <label><InputRadio Value="1" />S</label>
+        </InputRadioGroup>
+        <ValidationMessage For="@(() => elProducto.Talla)" />
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Producto elProducto = new Producto();
+    protected override async Task OnInitializedAsync()
+    {
+        elProducto = await http.GetFromJsonAsync<Producto>($"api/productos/{Id}");
+    }
+    private async void Guardar()
+    {
+        await http.PutAsJsonAsync($"api/productos/{Id}", elProducto);
+        navegar.NavigateTo("/productos");
+    }
+}
